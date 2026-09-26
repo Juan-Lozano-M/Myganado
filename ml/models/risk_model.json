@@ -1,0 +1,27 @@
+{
+  "model": "RandomForest",
+  "target": "risk_level",
+  "features": [
+    "day",
+    "breed",
+    "months_after_giving_birth",
+    "previous_mastitis_status",
+    "iu_fl",
+    "eu_fl",
+    "iu_fr",
+    "eu_fr",
+    "iu_rl",
+    "eu_rl",
+    "iu_rr",
+    "eu_rr",
+    "temperature",
+    "hardness",
+    "pain",
+    "milk_visibility"
+  ],
+  "classes": [
+    "ALTO",
+    "BAJO"
+  ],
+  "source": "Mendeley Data: Clinical Mastitis in Cows based on Udder Parameter using IoT"
+}
