@@ -62,17 +62,29 @@ my-ganado/
 ## Estado actual
 
 - Fase 1: completada en la documentación base del proyecto.
-- Fase 2: iniciada con investigación de datasets reales.
-- Fase 3: iniciada con estructura de almacenamiento y documentación de datos.
-- Dashboard inicial: disponible en `frontend/`, conectado a animales, alertas y simulaciones de la API.
+- Fase 2: fuente Mendeley Data documentada con DOI y licencia.
+- Fase 3: dataset original y ficha disponibles; limpieza actualizada para conservar ID de animal, falta regenerar los artefactos procesados.
+- Fuente secundaria multiespecie añadida en `ml/data/raw/young_stock/` (terneros, corderos y cabritos); permanece aislada del modelo bovino y tiene perfil y copia limpia propios.
+- Backend y dashboard inicial: disponibles y conectados para registrar animales, guardar simulaciones asociadas, consultar alertas y revisar historial.
+- Política de alertas: `BAJO` no genera alerta activa; `MEDIO` alerta al propietario y escala tras tres eventos consecutivos; `ALTO` escala a propietario y veterinario.
 
 ## Siguientes pasos
 
-1. Definir la fuente real final para ML.
-2. Registrar la ficha técnica del dataset.
-3. Crear scripts y notebooks de limpieza.
-4. Preparar el primer pipeline de entrenamiento.
-5. Completar vistas de historial, alertas y flujo integral del dashboard.
+1. Resolver la definición de la clase `MEDIO` y reentrenar el modelo si corresponde.
+2. Implementar el adaptador de notificaciones y registrar sus estados.
+3. Añadir pruebas automatizadas de validación y flujo integral.
+4. Preparar Docker Compose y la migración a PostgreSQL.
+5. Completar métricas, gráficas históricas y evidencia de demostración.
+
+## Ejecución con Docker
+
+Con Docker Compose instalado, desde la raíz del repositorio:
+
+```powershell
+docker compose up --build
+```
+
+El dashboard queda disponible en `http://localhost:8080`; la API y la base SQLite se ejecutan en contenedores y los datos persisten en el volumen `myganado_data`. Para detener los servicios conserva los datos con `docker compose down`.
 
 ## Nota metodológica
 

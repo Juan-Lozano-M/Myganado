@@ -11,94 +11,38 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app-shell">
+  <div id="auth-mount"></div>
+  <div class="app-shell" hidden>
     <aside class="sidebar">
       <a class="brand" href="#inicio" aria-label="My Ganado, inicio">
         <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
         <span>my ganado</span>
       </a>
-      <div class="side-rule"></div>
-      <nav aria-label="Navegación principal">
-        <a class="nav-link active" href="#inicio"><span class="nav-icon">◈</span>Resumen</a>
-        <a class="nav-link" href="#animales"><span class="nav-icon">◌</span>Animales</a>
-        <a class="nav-link" href="#alertas"><span class="nav-icon">!</span>Alertas <span id="nav-alert-count" class="nav-count">0</span></a>
+      <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
+      <nav id="primary-navigation" aria-label="Navegación principal">
+        <a class="nav-link active" href="#inicio">Resumen</a>
+        <a class="nav-link" href="#animales">Animales</a>
+        <a class="nav-link" href="#historial">Historial</a>
+        <div class="alerts-nav">
+          <button class="nav-link nav-button" id="alert-toggle" type="button" aria-expanded="false" aria-controls="alert-popover">Alertas <span id="nav-alert-count" class="nav-count">0</span><span class="chevron" aria-hidden="true"></span></button>
+          <div class="alert-popover" id="alert-popover" hidden>
+            <div class="popover-heading"><strong>Alertas recientes</strong><span id="popover-alert-count">0 registradas</span></div>
+            <div id="alert-popover-list" class="popover-list"><p>No hay alertas registradas.</p></div>
+            <a class="popover-all" href="#alertas">Ver todas las alertas</a>
+          </div>
+        </div>
+        <a class="nav-link" href="#veterinario">Veterinario</a>
       </nav>
-      <div class="side-note">
-        <span class="pulse-dot"></span>
-        <div><strong>Modelo activo</strong><small>Random Forest · v0.1</small></div>
-      </div>
-      <div class="sidebar-footer">Seguimiento de apoyo<br>no diagnóstico veterinario</div>
+      <div class="account-menu"><strong id="account-name"></strong><span id="account-role"></span><button id="logout-button" class="text-button" type="button">Cerrar sesión</button></div>
     </aside>
 
-    <main class="main-content" id="inicio">
-      <header class="topbar">
-        <div>
-          <p class="section-label">Panel operativo / <span id="today"></span></p>
-          <h1>Buenos días, equipo.</h1>
-        </div>
-        <button class="refresh-button" id="refresh-button" type="button" title="Actualizar datos"><span aria-hidden="true">↻</span> Actualizar</button>
-      </header>
-
-      <section class="status-strip" aria-label="Estado del sistema">
-        <span class="status-indicator"></span>
-        <strong>Sistema estable</strong>
-        <span>API conectada · último chequeo hace unos segundos</span>
-      </section>
-
-      <section class="metric-grid" aria-label="Resumen de indicadores">
-        <article class="metric metric-primary"><span class="metric-label">Animales registrados</span><strong id="animal-total">—</strong><span class="metric-foot">en seguimiento</span></article>
-        <article class="metric"><span class="metric-label">Alertas activas</span><strong id="alert-total">—</strong><span class="metric-foot alert-foot">requieren revisión</span></article>
-        <article class="metric"><span class="metric-label">Última lectura</span><strong id="latest-risk">—</strong><span id="latest-probability" class="metric-foot">esperando datos</span></article>
-      </section>
-
-      <section class="content-grid">
-        <article class="panel animals-panel" id="animales">
-          <div class="panel-heading"><div><p class="section-label">Registro vivo</p><h2>Animales en seguimiento</h2></div><button class="text-button" id="new-animal-button" type="button">+ Registrar animal</button></div>
-          <div id="animals-state" class="loading-state">Cargando registros...</div>
-          <div id="animals-list" class="animal-list" hidden></div>
-        </article>
-
-        <article class="panel action-panel">
-          <div class="panel-heading"><div><p class="section-label">Prueba controlada</p><h2>Simular una lectura</h2></div></div>
-          <p class="panel-copy">Genera una lectura reproducible para comprobar el recorrido de monitoreo.</p>
-          <label for="scenario-select">Escenario</label>
-          <select id="scenario-select">
-            <option value="normal">Normal</option>
-            <option value="estres_ambiental">Estrés ambiental</option>
-            <option value="posible_riesgo">Posible riesgo</option>
-            <option value="alto">Riesgo alto</option>
-            <option value="persistente">Riesgo persistente</option>
-          </select>
-          <button class="primary-button" id="simulate-button" type="button"><span aria-hidden="true">◉</span> Ejecutar simulación</button>
-          <div id="simulation-result" class="simulation-result" hidden></div>
-        </article>
-      </section>
-
-      <section class="panel alerts-panel" id="alertas">
-        <div class="panel-heading"><div><p class="section-label">Atención priorizada</p><h2>Alertas recientes</h2></div><span id="alert-summary" class="panel-meta">Sin alertas</span></div>
-        <div id="alerts-state" class="loading-state">Cargando alertas...</div>
-        <div id="alerts-list" class="alerts-list" hidden></div>
-      </section>
-
-      <footer class="page-footer">My Ganado <span>·</span> apoyo para seguimiento de salud bovina</footer>
+    <main class="main-content">
+      <div id="views-mount"></div>
+      <footer class="page-footer"><span>My Ganado: apoyo para seguimiento de salud bovina</span><span>Clasificación de riesgo por medición</span><span>Seguimiento de apoyo, no diagnóstico veterinario</span></footer>
     </main>
   </div>
-
-  <dialog id="animal-dialog" class="animal-dialog">
-    <form method="dialog" id="animal-form">
-      <div class="dialog-heading"><div><p class="section-label">Nuevo registro</p><h2>Registrar animal</h2></div><button class="close-button" value="cancel" aria-label="Cerrar">×</button></div>
-      <div class="form-grid">
-        <label>ID del animal<input name="animal_id" required placeholder="Ej. toro-017"></label>
-        <label>Raza<input name="breed" required placeholder="Ej. Jersey"></label>
-        <label>Edad (meses)<input name="age_months" type="number" min="0" required></label>
-        <label>Peso (kg)<input name="weight_kg" type="number" min="1" step="0.1" required></label>
-        <label class="full-width">Propietario<input name="owner" required placeholder="Nombre o finca"></label>
-      </div>
-      <p id="form-error" class="form-error" hidden></p>
-      <button class="primary-button" type="submit">Guardar animal</button>
-    </form>
-  </dialog>
+  <div id="dialog-mount"></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js"></script>
+  <script type="module" src="src/boot.js"></script>
 </body>
 </html>

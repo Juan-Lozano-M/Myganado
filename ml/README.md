@@ -55,3 +55,7 @@ ml/
 ## Nota de uso
 
 Este módulo es la base del componente de riesgo del sistema. La clasificación en BAJO, MEDIO y ALTO debe entenderse como apoyo para seguimiento y no como diagnóstico veterinario.
+
+## Modelo exploratorio subclínico de Ruanda
+
+`ml/scripts/train_subclinical_model.py` entrena por separado con el dataset S1 de Ruanda una clasificación CMT negativo (`BAJO`) / CMT positivo subclínico (`MEDIO`). Usa variables de encuesta, no las variables de la API clínica, y no produce `ALTO`; por eso no reemplaza ni se carga en el endpoint clínico. Resultados y límites: `docs/MODELO_SUBCLINICO_RWANDA.md`.

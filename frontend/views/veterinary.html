@@ -1,0 +1,28 @@
+<section class="app-view" id="veterinario" data-view="veterinario" hidden>
+        <header class="view-heading"><div><h1>Acceso veterinario</h1><p>Comparte o consulta la información de seguimiento.</p></div></header>
+        <div class="veterinary-layout">
+          <section id="share-panel" class="panel" hidden>
+            <div class="panel-heading"><h2>Compartir un animal</h2></div>
+            <p class="panel-copy">El veterinario debe tener una cuenta registrada. Podrá consultar el historial y las alertas del animal compartido.</p>
+            <form id="share-form" class="share-form">
+              <label>Animal<select id="vet-animal-select" required><option value="">Selecciona un animal</option></select></label>
+              <label>Correo del veterinario<input id="vet-email" type="email" required placeholder="veterinario@correo.com"></label>
+              <div class="share-actions"><button class="primary-button" type="submit">Compartir acceso</button><button id="revoke-access" class="text-button" type="button">Retirar acceso</button></div>
+            </form>
+            <p class="selection-note">Animal seleccionado: <strong id="share-animal">Sin seleccionar</strong></p>
+          </section>
+          <section id="vet-view-panel" class="panel" hidden>
+            <div class="panel-heading"><h2>Animales compartidos contigo</h2></div>
+            <p class="panel-copy">Aquí aparecen los animales que sus propietarios han compartido con tu cuenta. Puedes consultar su historial y sus alertas.</p>
+            <div id="vet-animals-state" class="loading-state">Cargando animales…</div>
+            <div id="vet-animals-list" class="animal-list" hidden></div>
+          </section>
+          <aside class="panel veterinary-info">
+            <h2>Cómo funciona el acceso</h2>
+            <dl class="account-details"><div><dt>Cuenta</dt><dd id="vet-account-name">…</dd></div><div><dt>Correo</dt><dd id="vet-account-email">…</dd></div><div><dt>Perfil</dt><dd id="vet-account-role">…</dd></div></dl>
+            <div><strong>Para productores</strong><p>Selecciona el animal y escribe el correo de una cuenta veterinaria. Puedes retirar el acceso con el mismo correo.</p></div>
+            <div><strong>Para veterinarios</strong><p>Los animales compartidos aparecen en tu cuenta para consultar sus lecturas y alertas. El acceso no permite registrar animales ni simular lecturas.</p></div>
+            <p class="panel-copy">Este seguimiento sirve de apoyo y no sustituye un diagnóstico veterinario.</p>
+          </aside>
+        </div>
+      </section>

@@ -1,0 +1,68 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "My Ganado: levantar proyecto",
+      "dependsOn": [
+        "My Ganado: backend",
+        "My Ganado: frontend"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Inicia la API en http://127.0.0.1:8000 y la interfaz en http://127.0.0.1:5174/."
+    },
+    {
+      "label": "My Ganado: backend",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "windows": {
+        "command": "${workspaceFolder}/.venv/Scripts/python.exe"
+      },
+      "args": [
+        "-B", "-m", "uvicorn", "app.main:app",
+        "--app-dir", "backend", "--host", "127.0.0.1", "--port", "8000"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "runOptions": { "instanceLimit": 1 },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "myganado",
+        "clear": false
+      },
+      "detail": "Usa el entorno .venv del proyecto. Reinicia esta tarea después de modificar el backend."
+    },
+    {
+      "label": "My Ganado: frontend",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "windows": {
+        "command": "${workspaceFolder}/.venv/Scripts/python.exe"
+      },
+      "args": [
+        "-B", "-u", "-m", "http.server", "5174", "--bind", "127.0.0.1"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "runOptions": { "instanceLimit": 1 },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "myganado",
+        "clear": false
+      },
+      "detail": "Abre http://127.0.0.1:5174/. Recarga el navegador después de modificar el frontend."
+    }
+  ]
+}

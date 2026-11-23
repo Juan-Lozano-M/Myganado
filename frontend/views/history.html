@@ -1,0 +1,21 @@
+<section class="app-view" id="historial" data-view="historial" hidden>
+        <header class="view-heading"><div><h1>Historial</h1><p>Consulta las mediciones y el riesgo estimado por animal.</p></div></header>
+        <section class="panel history-panel">
+          <div class="panel-heading"><h2>Mediciones registradas</h2><span id="history-meta" class="panel-meta">Selecciona un animal</span></div>
+          <label class="view-field" for="history-animal-select">Animal<select id="history-animal-select"><option value="">Selecciona un animal</option></select></label>
+          <div id="history-state" class="loading-state">Selecciona un animal para consultar sus mediciones.</div>
+          <div id="history-charts" class="history-charts" hidden>
+            <p id="history-chart-note" class="chart-note" hidden>Hay una sola medición. Registra otra para ver la tendencia.</p>
+            <figure class="history-chart history-chart-primary">
+              <figcaption><span class="chart-caption"><strong>Evolución del riesgo</strong><span>Clasificación por medición</span></span><span class="chart-current"><span>Última medición</span><strong id="risk-chart-latest">Sin datos</strong></span></figcaption>
+              <div id="risk-chart" class="chart-viewport" tabindex="0" aria-label="Gráfica de evolución del riesgo; desplázate horizontalmente si es necesario"></div>
+            </figure>
+            <figure class="history-chart">
+              <figcaption><span class="chart-caption"><strong>Temperatura corporal</strong><span id="temperature-chart-range">Lecturas en grados Celsius</span></span><span class="chart-current"><span>Última lectura</span><strong id="temperature-chart-latest">Sin datos</strong></span></figcaption>
+              <div id="temperature-chart" class="chart-viewport" tabindex="0" aria-label="Gráfica de temperatura corporal; desplázate horizontalmente si es necesario"></div>
+            </figure>
+          </div>
+          <h3 id="history-list-title" class="history-list-title" hidden>Detalle de mediciones</h3>
+          <div id="history-list" class="history-list" hidden></div>
+        </section>
+      </section>

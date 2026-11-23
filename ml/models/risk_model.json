@@ -1,5 +1,6 @@
 {
-  "model": "RandomForest",
+  "model": "DecisionTree",
+  "selection_rule": "highest grouped-test macro F1, then macro recall",
   "target": "risk_level",
   "features": [
     "day",
@@ -23,5 +24,74 @@
     "ALTO",
     "BAJO"
   ],
-  "source": "Mendeley Data: Clinical Mastitis in Cows based on Udder Parameter using IoT"
+  "source": "Mendeley Data: Clinical Mastitis in Cows based on Udder Parameter using IoT",
+  "evaluation_split": "GroupShuffleSplit by cow_id (80/20; random_state=42)",
+  "evaluation_metrics": [
+    {
+      "model": "RandomForest",
+      "accuracy": 0.990909090909091,
+      "f1": 0.9908236197648924,
+      "f1_macro": 0.985011581959395,
+      "precision_macro": 0.9944444444444445,
+      "recall_macro": 0.9761904761904762,
+      "confusion_matrix": [
+        [
+          240,
+          12
+        ],
+        [
+          0,
+          1068
+        ]
+      ],
+      "classes": [
+        "ALTO",
+        "BAJO"
+      ]
+    },
+    {
+      "model": "DecisionTree",
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "f1_macro": 1.0,
+      "precision_macro": 1.0,
+      "recall_macro": 1.0,
+      "confusion_matrix": [
+        [
+          252,
+          0
+        ],
+        [
+          0,
+          1068
+        ]
+      ],
+      "classes": [
+        "ALTO",
+        "BAJO"
+      ]
+    },
+    {
+      "model": "LogisticRegression",
+      "accuracy": 0.990909090909091,
+      "f1": 0.9908236197648924,
+      "f1_macro": 0.985011581959395,
+      "precision_macro": 0.9944444444444445,
+      "recall_macro": 0.9761904761904762,
+      "confusion_matrix": [
+        [
+          240,
+          12
+        ],
+        [
+          0,
+          1068
+        ]
+      ],
+      "classes": [
+        "ALTO",
+        "BAJO"
+      ]
+    }
+  ]
 }

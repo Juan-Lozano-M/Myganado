@@ -1,0 +1,24 @@
+<section id="auth-screen" class="auth-screen">
+    <div class="auth-story">
+      <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>my ganado</a>
+      <h1>Tu campo.<br>Tu ganado.<br>Tu tranquilidad.</h1>
+      <p>Un espacio para llevar el seguimiento de tus animales y compartir sus lecturas con tu veterinario.</p>
+      <div class="auth-roles"><strong>Productores y campesinos</strong><span>Registra tus animales y sigue sus lecturas.</span><strong>Veterinarios</strong><span>Consulta los animales que sus propietarios te compartan.</span></div>
+    </div>
+    <div class="auth-card">
+      <h2 id="auth-title">Iniciar sesión</h2>
+      <p id="auth-description">Ingresa con tu correo y contraseña.</p>
+      <form id="auth-form">
+        <div id="registration-fields" hidden>
+          <label>Tu nombre<input name="name" autocomplete="name" minlength="2" maxlength="100" disabled></label>
+          <label>Tipo de cuenta<select name="role" disabled><option value="productor">Productor / campesino / usuario normal</option><option value="veterinario">Veterinario</option></select></label>
+          <p class="auth-hint">El perfil veterinario no acredita una licencia profesional. Solo podrás ver los animales que te compartan.</p>
+        </div>
+        <label>Correo electrónico<input name="email" type="email" autocomplete="username" required maxlength="254" placeholder="tu@correo.com"></label>
+        <label>Contraseña<input name="password" type="password" autocomplete="current-password" required minlength="10" maxlength="128" placeholder="Mínimo 10 caracteres"></label>
+        <p id="auth-error" class="form-error" role="alert" hidden></p>
+        <button id="auth-submit" class="primary-button" type="submit">Entrar</button>
+      </form>
+      <button id="auth-toggle" class="text-button" type="button">¿No tienes cuenta? Regístrate</button>
+    </div>
+  </section>

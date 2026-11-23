@@ -1,0 +1,29 @@
+<section class="app-view" id="animales" data-view="animales" hidden>
+        <header class="view-heading"><div><h1>Animales</h1><p>Registros y simulación de lecturas.</p></div></header>
+
+      <section class="content-grid">
+        <article class="panel animals-panel">
+          <div class="panel-heading"><h2>Animales en seguimiento</h2><button class="text-button" id="new-animal-button" type="button">Registrar animal</button></div>
+          <div id="animals-state" class="loading-state">Cargando registros…</div>
+          <div id="animals-list" class="animal-list" hidden></div>
+        </article>
+
+        <article class="panel action-panel">
+          <div class="panel-heading"><h2>Simular una lectura</h2></div>
+          <p class="panel-copy">Elige un animal y un escenario. La lectura se guardará en su historial.</p>
+          <p id="simulation-species-note" class="panel-copy" hidden>El modelo de mastitis se entrenó con vacas adultas; esta lectura no se puede simular para otras categorías.</p>
+          <label for="animal-select">Animal</label>
+          <select id="animal-select"><option value="">Registra un animal primero</option></select>
+          <label for="scenario-select">Escenario</label>
+          <select id="scenario-select">
+            <option value="normal">Normal</option>
+            <option value="estres_ambiental">Estrés ambiental</option>
+            <option value="posible_riesgo">Posible riesgo</option>
+            <option value="alto">Riesgo alto</option>
+            <option value="persistente">Riesgo persistente</option>
+          </select>
+          <button class="primary-button" id="simulate-button" type="button">Ejecutar simulación</button>
+          <div id="simulation-result" class="simulation-result" hidden></div>
+        </article>
+      </section>
+      </section>

@@ -1,0 +1,28 @@
+<section class="app-view" id="inicio" data-view="inicio">
+      <header class="topbar">
+        <div>
+          <p class="dashboard-date" id="today"></p>
+          <h1>Seguimiento del ganado</h1>
+          <p class="intro-copy">Animales, lecturas y alertas en un mismo lugar.</p>
+        </div>
+        <button class="refresh-button" id="refresh-button" type="button" title="Actualizar datos"><span aria-hidden="true">↻</span> Actualizar</button>
+      </header>
+
+      <section class="status-strip" aria-label="Estado del sistema">
+        <strong id="connection-title">Conectando</strong>
+        <span id="connection-detail" role="status">Consultando animales y alertas…</span>
+      </section>
+
+      <section class="metric-grid" aria-label="Resumen de indicadores">
+        <article class="metric metric-primary"><span class="metric-label">Animales registrados</span><strong id="animal-total">…</strong><span class="metric-foot">en seguimiento</span></article>
+        <article class="metric"><span class="metric-label">Alertas registradas</span><strong id="alert-total">…</strong><span class="metric-foot alert-foot">lecturas con riesgo</span></article>
+        <article class="metric"><span class="metric-label">Última alerta</span><strong id="latest-risk">…</strong><span id="latest-probability" class="metric-foot">sin alertas registradas</span></article>
+      </section>
+
+      <div class="dashboard-links" aria-label="Accesos del panel">
+        <a href="#animales"><strong>Animales</strong><span>Consulta tus registros y simula una lectura.</span></a>
+        <a href="#historial"><strong>Historial</strong><span>Revisa las mediciones de cada animal.</span></a>
+        <a href="#alertas"><strong>Alertas</strong><span>Consulta las lecturas que generaron alertas.</span></a>
+        <a href="#veterinario"><strong>Veterinario</strong><span id="dashboard-vet-description">Gestiona el acceso al seguimiento.</span></a>
+      </div>
+      </section>

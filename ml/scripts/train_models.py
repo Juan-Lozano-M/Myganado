@@ -22,10 +22,11 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score, precision_score, recall_score
+from sklearn.model_selection import GroupShuffleSplit, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -94,7 +95,7 @@ def build_model_pipeline(X: pd.DataFrame, y: pd.Series):
         transformers.append(
             (
                 "numeric",
-                Pipeline(steps=[("imputer", SimpleImputer(strategy="median"))]),
+                Pipeline(steps=[("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler())]),
                 numeric_cols,
             )
         )
@@ -128,7 +129,7 @@ def evaluate_models(X_train, X_test, y_train, y_test):
             class_weight="balanced",
         ),
         "LogisticRegression": LogisticRegression(
-            max_iter=1000,
+            max_iter=2000,
             class_weight="balanced",
             random_state=42,
         ),
@@ -150,39 +151,58 @@ def evaluate_models(X_train, X_test, y_train, y_test):
                 "model": name,
                 "accuracy": accuracy_score(y_test, y_pred),
                 "f1": f1_score(y_test, y_pred, average="weighted"),
-                "confusion_matrix": confusion_matrix(y_test, y_pred),
-                "report": classification_report(y_test, y_pred),
+                "f1_macro": f1_score(y_test, y_pred, average="macro"),
+                "precision_macro": precision_score(y_test, y_pred, average="macro", zero_division=0),
+                "recall_macro": recall_score(y_test, y_pred, average="macro", zero_division=0),
+                "confusion_matrix": confusion_matrix(y_test, y_pred, labels=sorted(set(y_test))).tolist(),
+                "classes": sorted(set(y_test)),
+                "report": classification_report(y_test, y_pred, zero_division=0, output_dict=True),
             }
         )
 
     return results
 
 
-def train_and_save_selected_model(X: pd.DataFrame, y: pd.Series) -> None:
+def train_and_save_selected_model(X: pd.DataFrame, y: pd.Series, evaluation: list[dict], split_strategy: str) -> None:
+    selected = max(evaluation, key=lambda result: (result["f1_macro"], result["recall_macro"]))["model"]
+    estimators = {
+        "RandomForest": RandomForestClassifier(n_estimators=200, random_state=42, class_weight="balanced"),
+        "DecisionTree": DecisionTreeClassifier(random_state=42, class_weight="balanced"),
+        "LogisticRegression": LogisticRegression(max_iter=2000, class_weight="balanced", random_state=42),
+    }
     model = Pipeline(
         steps=[
             ("preprocessor", build_model_pipeline(X, y)),
-            (
-                "model",
-                RandomForestClassifier(
-                    n_estimators=200,
-                    random_state=42,
-                    class_weight="balanced",
-                ),
-            ),
+            ("model", estimators[selected]),
         ]
     )
     model.fit(X, y)
     MODEL_ROOT.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, MODEL_ROOT / "risk_model.joblib")
     metadata = {
-        "model": "RandomForest",
+        "model": selected,
+        "selection_rule": "highest grouped-test macro F1, then macro recall",
         "target": "risk_level",
         "features": X.columns.tolist(),
         "classes": model.named_steps["model"].classes_.tolist(),
         "source": "Mendeley Data: Clinical Mastitis in Cows based on Udder Parameter using IoT",
+        "evaluation_split": split_strategy,
+        "evaluation_metrics": [
+            {key: value for key, value in result.items() if key != "report"}
+            for result in evaluation
+        ],
     }
     (MODEL_ROOT / "risk_model.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    (MODEL_ROOT / "evaluation_metrics.json").write_text(
+        json.dumps(
+            {
+                "split_strategy": split_strategy,
+                "models": evaluation,
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
     print(f"Saved selected model to: {MODEL_ROOT / 'risk_model.joblib'}")
 
 
@@ -201,19 +221,28 @@ def main() -> int:
         raise ValueError(f"Dataset {dataset_path} is empty and cannot be used for training.")
 
     target_col = pick_target_column(df)
-    X = df.drop(columns=[target_col])
+    groups = df["cow_id"] if "cow_id" in df.columns else None
+    X = df.drop(columns=[target_col, "cow_id"], errors="ignore")
     y = df[target_col]
 
     if y.isnull().any():
         raise ValueError("Target column contains null values. Clean the dataset before training.")
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.2,
-        random_state=42,
-        stratify=y if y.nunique() > 1 else None,
-    )
+    if groups is not None:
+        splitter = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+        train_indices, test_indices = next(splitter.split(X, y, groups))
+        X_train, X_test = X.iloc[train_indices], X.iloc[test_indices]
+        y_train, y_test = y.iloc[train_indices], y.iloc[test_indices]
+        split_strategy = "GroupShuffleSplit by cow_id (80/20; random_state=42)"
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X,
+            y,
+            test_size=0.2,
+            random_state=42,
+            stratify=y if y.nunique() > 1 else None,
+        )
+        split_strategy = "Stratified row split (cow_id unavailable; possible animal leakage)"
 
     results = evaluate_models(X_train, X_test, y_train, y_test)
 
@@ -221,12 +250,14 @@ def main() -> int:
         print(f"\n=== {result['model']} ===")
         print(f"Accuracy: {result['accuracy']:.4f}")
         print(f"Weighted F1: {result['f1']:.4f}")
+        print(f"Macro precision: {result['precision_macro']:.4f}")
+        print(f"Macro recall: {result['recall_macro']:.4f}")
         print("Confusion Matrix:")
         print(result["confusion_matrix"])
         print("Classification Report:")
         print(result["report"])
 
-    train_and_save_selected_model(X, y)
+    train_and_save_selected_model(X, y, results, split_strategy)
 
     return 0
 

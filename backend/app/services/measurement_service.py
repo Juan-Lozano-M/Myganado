@@ -1,6 +1,7 @@
 from app.models.schemas import MeasurementResponse, PredictionRequest
 from app.services.prediction_service import PredictionService
 from app.services.repository import Repository
+from app.services.notification_service import NotificationService
 
 
 class MeasurementService:
@@ -17,4 +18,5 @@ class MeasurementService:
             probability=prediction.probability,
             model=prediction.model,
         )
+        NotificationService(self.repository).dispatch_for_prediction(stored["prediction_id"])
         return MeasurementResponse(**stored, prediction=prediction)

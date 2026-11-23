@@ -1,0 +1,25 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.log
+backend/data/*.db-wal
+backend/data/*.db-shm
+backend/data/*.db
+.env
+
+# Herramientas de IA y skills locales
+.agents/
+.github/skills/
+.github/hooks/impeccable.json
+.hallmark/
+.impeccable/
+skills-lock.json
+MYGANADO.zip
+
+# Modelos y métricas generados por los entrenamientos
+ml/models/*.joblib
+ml/models/*metrics*.json
+ml/models/evaluation_metrics.json
+
+# Datasets locales y derivados
+ml/data/

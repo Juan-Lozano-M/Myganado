@@ -42,7 +42,7 @@ Investigar datasets reales con enfoque en confianza, calidad y relación con bov
 
 ### Estado
 
-En progreso.
+Completada para la semilla inicial: dataset de mastitis clínica de Mendeley Data, DOI `10.17632/kbvcdw5b4m.1`, licencia CC BY 4.0. La fuente tiene una etiqueta binaria y no permite inferir una clase intermedia.
 
 ---
 
@@ -65,7 +65,7 @@ Guardar y registrar la información original sin alterar su estado inicial.
 
 ### Estado
 
-En progreso. Se ha creado la estructura base de almacenamiento.
+En progreso. El original está en `ml/data/raw/cattle_mastitis.csv` y la ficha concreta está documentada. La limpieza se actualizó para mantener `cow_id` como variable de agrupación; se deben regenerar los CSV limpio/procesado y generar el perfil de calidad.
 
 ---
 
@@ -77,7 +77,9 @@ Se han dejado los siguientes artefactos:
 - [TRAZABILIDAD.md](../TRAZABILIDAD.md)
 - [PRODUCT.md](../PRODUCT.md)
 - [docs/FUENTES_DATASET.md](FUENTES_DATASET.md)
+- [docs/FICHA_DATASET_FINAL.md](FICHA_DATASET_FINAL.md)
+- [ml/scripts/profile_data.py](../ml/scripts/profile_data.py)
 
 ## Siguiente acción recomendada
 
-Seleccionar una fuente real prioritaria, documentarla con ficha técnica y preparar la carga inicial del dataset en `ml/data/raw/`.
+Ejecutar `prepare_data.py`, `profile_data.py` y `train_models.py` en el entorno con las dependencias ML instaladas. El nuevo protocolo divide por animal para evitar que mediciones de una misma vaca aparezcan en entrenamiento y evaluación.

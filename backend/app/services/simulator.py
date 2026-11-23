@@ -1,4 +1,5 @@
 from typing import Literal
+from datetime import datetime, timezone
 
 from app.models.schemas import PredictionRequest
 
@@ -64,4 +65,10 @@ class CattleSimulator:
             "eu_rr": 181 + offset,
         }
         values.update(SCENARIO_OVERRIDES[scenario])
+        values.update({
+            "ambient_temperature_c": 34 + offset * 0.2 if scenario == "estres_ambiental" else 26 + offset * 0.2,
+            "humidity_pct": 82 if scenario == "estres_ambiental" else 65,
+            "water_available": scenario not in {"estres_ambiental", "alto"},
+            "observed_at": datetime.now(timezone.utc),
+        })
         return PredictionRequest.model_validate(values)

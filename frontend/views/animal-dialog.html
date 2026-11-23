@@ -1,0 +1,16 @@
+<dialog id="animal-dialog" class="animal-dialog">
+    <form method="dialog" id="animal-form">
+      <div class="dialog-heading"><h2>Registrar animal</h2><button class="close-button" value="cancel" aria-label="Cerrar">×</button></div>
+      <div class="form-grid">
+        <p class="full-width panel-copy" id="animal-id-help">El identificador se asigna automáticamente al guardar.</p>
+        <label class="full-width">Tipo de animal<select name="species" id="species-select" required disabled><option value="">Cargando categorías…</option></select></label>
+        <label id="breed-field" class="full-width">Raza del dataset bovino<select name="breed" id="breed-select" required disabled><option value="">Selecciona una raza</option></select></label>
+        <p id="species-source-note" class="full-width panel-copy" aria-live="polite"></p>
+        <label>Edad (meses)<input name="age_months" type="number" min="0" required></label>
+        <label>Peso (kg)<input name="weight_kg" type="number" min="1" step="0.1" required></label>
+        <label class="full-width">Propietario<input name="owner" required maxlength="150" placeholder="Nombre o finca"></label>
+      </div>
+      <p id="form-error" class="form-error" hidden></p>
+      <button class="primary-button" type="submit">Guardar animal</button>
+    </form>
+  </dialog>

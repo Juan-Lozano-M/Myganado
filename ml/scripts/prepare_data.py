@@ -69,7 +69,7 @@ def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
     }
     normalized = df.rename(columns=rename_map)
     if "risk_level" in normalized.columns:
-        normalized["risk_level"] = normalized["risk_level"].map({0: "BAJO", 1: "ALTO"})
+        normalized["risk_level"] = normalized["risk_level"].map({0: "BAJO", 1: "MEDIO", 2: "ALTO"})
     return normalized
 
 
@@ -80,9 +80,9 @@ def clean_dataset(df: pd.DataFrame) -> pd.DataFrame:
 
     if "risk_level" in cleaned.columns:
         cleaned = cleaned.dropna(subset=["risk_level"])
-
-    if "cow_id" in cleaned.columns:
-        cleaned = cleaned.drop(columns=["cow_id"])
+        # Ensure risk_level values are valid
+        valid_risks = {"BAJO", "MEDIO", "ALTO"}
+        cleaned = cleaned[cleaned["risk_level"].isin(valid_risks)]
 
     return cleaned.reset_index(drop=True)
 
